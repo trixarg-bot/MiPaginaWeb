@@ -1,0 +1,62 @@
+﻿@page "/calculadora"
+
+<div class="calculator-container">
+    <h1>Calculadora</h1>
+
+    <div class="input-group">
+        <input type="number" @bind="numero1" placeholder="Primer número" />
+        <input type="number" @bind="numero2" placeholder="Segundo número" />
+    </div>
+
+    <div class="button-group">
+        <button @onclick="() => Calcular('+')" class="calc-button">➕</button>
+        <button @onclick="() => Calcular('-')" class="calc-button">➖</button>
+        <button @onclick="() => Calcular('*')" class="calc-button">✖️</button>
+        <button @onclick="() => Calcular('/')" class="calc-button">➗</button>
+    </div>
+
+    @if (resultado != null)
+    {
+        <div class="result">
+            <p>Resultado: @resultado</p>
+        </div>
+    }
+</div>
+
+@code {
+    private double? numero1;
+    private double? numero2;
+    private double? resultado;
+
+    private void Calcular(char operacion)
+    {
+        if (numero1 == null || numero2 == null)
+        {
+            resultado = null;
+            return;
+        }
+
+        switch (operacion)
+        {
+            case '+':
+                resultado = numero1 + numero2;
+                break;
+            case '-':
+                resultado = numero1 - numero2;
+                break;
+            case '*':
+                resultado = numero1 * numero2;
+                break;
+            case '/':
+                if (numero2 != 0)
+                {
+                    resultado = numero1 / numero2;
+                }
+                else
+                {
+                    resultado = null;
+                }
+                break;
+        }
+    }
+}
