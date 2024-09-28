@@ -1,4 +1,63 @@
 ﻿@page "/"
+@inject IJSRuntime JSRuntime
+
+<PageTitle>Inicio - Registro de Accidentes</PageTitle>
+
+<div class="container">
+    <h1 class="mt-4">Bienvenido al Sistema de Registro de Accidentes</h1>
+    
+    <p class="lead">
+        Este sistema te permite registrar y analizar datos sobre accidentes de tránsito.
+        Utiliza el menú de navegación para acceder a las diferentes funcionalidades.
+    </p>
+
+     <div class="stats-overview mt-4">
+        @* Este es un compenente reutilizable *@
+        <StatCard Value="@totalAccidentes.ToString()" Label="Total de Accidentes" Icon="oi oi-list-rich" />
+        <StatCard Value="@accidentesUltimaSemana.ToString()" Label="Accidentes Última Semana" Icon="oi oi-calendar" />
+    </div>
+
+    <Dashboard/>
+
+    <div class="mt-4">
+        <h3>Acciones Rápidas</h3>
+        <div class="d-flex justify-content-around">
+            <NavLink class="btn btn-primary" href="registro-accidentes">
+                Registrar Nuevo Accidente
+            </NavLink>
+            <NavLink class="btn btn-secondary" href="lista-accidentes">
+                Ver Lista de Accidentes
+            </NavLink>
+        </div>
+    </div>
+</div>
+
+@code {
+    private int totalAccidentes;
+    private int accidentesUltimaSemana;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await CargarEstadisticas();
+    }
+
+    private async Task CargarEstadisticas()
+    {
+        var accidentesJson = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "accidentes");
+        if (!string.IsNullOrEmpty(accidentesJson))
+        {
+            var accidentes = System.Text.Json.JsonSerializer.Deserialize<List<Accidente>>(accidentesJson);
+            totalAccidentes = accidentes.Count;
+            accidentesUltimaSemana = accidentes.Count(a => a.Fecha >= DateTime.Now.AddDays(-7));
+        }
+    }
+
+    private class Accidente
+    {
+        public DateTime Fecha { get; set; }
+    }
+}
+@* @page "/"
 
 <div class="home-container">
     <h1 class="welcome-title">¡Bienvenido a mi proyecto Blazor! 👋</h1>
@@ -12,4 +71,4 @@
     </div>
     
     <button class="pulse-button">¡Empieza a programar ahora!</button>
-</div>
+</div> *@

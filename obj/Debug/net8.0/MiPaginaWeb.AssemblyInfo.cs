@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MiPaginaWeb")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+40450f50d8a24fc100bee9ac1287b644a5ac7bb6")]
 [assembly: System.Reflection.AssemblyProductAttribute("MiPaginaWeb")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MiPaginaWeb")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

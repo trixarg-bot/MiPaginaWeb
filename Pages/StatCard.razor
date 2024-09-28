@@ -1,0 +1,19 @@
+<div class="stat-card">
+    <div class="stat-value">@Value</div>
+    <div class="stat-label">@Label</div>
+    @if (!string.IsNullOrEmpty(Icon))
+    {
+        <i class="@Icon stat-icon"></i>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public string Value { get; set; }
+
+    [Parameter]
+    public string Label { get; set; }
+
+    [Parameter]
+    public string Icon { get; set; }
+}

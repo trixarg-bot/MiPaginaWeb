@@ -38,8 +38,32 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXMvQ2FsY3VsYWRvcmEucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
+[/Users/eduardoliriano/codigos/Programacion web/Tarea 1/MiPaginaWeb/Pages/Dashboard.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvRGFzaGJvYXJkLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
 [/Users/eduardoliriano/codigos/Programacion web/Tarea 1/MiPaginaWeb/Pages/Home.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXMvSG9tZS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/eduardoliriano/codigos/Programacion web/Tarea 1/MiPaginaWeb/Pages/Inicio.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvSW5pY2lvLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/eduardoliriano/codigos/Programacion web/Tarea 1/MiPaginaWeb/Pages/ListaAccidente.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvTGlzdGFBY2NpZGVudGUucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/eduardoliriano/codigos/Programacion web/Tarea 1/MiPaginaWeb/Pages/RegistroAccidente.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvUmVnaXN0cm9BY2NpZGVudGUucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/eduardoliriano/codigos/Programacion web/Tarea 1/MiPaginaWeb/Pages/Reportes.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvUmVwb3J0ZXMucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/eduardoliriano/codigos/Programacion web/Tarea 1/MiPaginaWeb/Pages/StatCard.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXMvU3RhdENhcmQucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
 [/Users/eduardoliriano/codigos/Programacion web/Tarea 1/MiPaginaWeb/Pages/Tabla_Multiplicar.razor]

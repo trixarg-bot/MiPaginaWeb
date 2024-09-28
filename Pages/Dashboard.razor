@@ -1,0 +1,46 @@
+@inject IJSRuntime JSRuntime
+
+<div class="mini-dashboard">
+    <h3>Resumen de Accidentes</h3>
+    <div class="dashboard-grid">
+        @* Este es un compenente reutilizable *@
+        <StatCard Value="@totalAccidentes.ToString()" Label="Total de Accidentes" Icon="oi oi-warning" />
+        <StatCard Value="@totalVehiculos.ToString()" Label="Vehículos Involucrados" Icon="oi oi-car" />
+        <StatCard Value="@totalMuertos.ToString()" Label="Total de Muertos" Icon="oi oi-medical-cross" />
+        <StatCard Value="@totalHeridos.ToString()" Label="Total de Heridos" Icon="oi oi-medical-cross" />
+        @* Este es un compenente reutilizable *@
+    </div>
+</div>
+
+
+@code {
+    private int totalAccidentes;
+    private int totalVehiculos;
+    private int totalMuertos;
+    private int totalHeridos;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await CargarDatos();
+    }
+
+    private async Task CargarDatos()
+    {
+        var accidentesJson = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "accidentes");
+        if (!string.IsNullOrEmpty(accidentesJson))
+        {
+            var accidentes = System.Text.Json.JsonSerializer.Deserialize<List<Accidente>>(accidentesJson);
+            totalAccidentes = accidentes.Count;
+            totalVehiculos = accidentes.Sum(a => a.CantidadVehiculos);
+            totalMuertos = accidentes.Sum(a => a.NumeroMuertos);
+            totalHeridos = accidentes.Sum(a => a.NumeroHeridos);
+        }
+    }
+
+    private class Accidente
+    {
+        public int CantidadVehiculos { get; set; }
+        public int NumeroMuertos { get; set; }
+        public int NumeroHeridos { get; set; }
+    }
+}

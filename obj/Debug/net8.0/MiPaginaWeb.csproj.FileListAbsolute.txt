@@ -1031,3 +1031,4 @@
 /Users/eduardoliriano/codigos/Programacion web/Tarea 1/MiPaginaWeb/obj/Debug/net8.0/refint/MiPaginaWeb.dll
 /Users/eduardoliriano/codigos/Programacion web/Tarea 1/MiPaginaWeb/obj/Debug/net8.0/MiPaginaWeb.pdb
 /Users/eduardoliriano/codigos/Programacion web/Tarea 1/MiPaginaWeb/obj/Debug/net8.0/ref/MiPaginaWeb.dll
+/Users/eduardoliriano/codigos/Programacion web/Tarea 1/MiPaginaWeb/obj/Debug/net8.0/MiPaginaWeb.sourcelink.json

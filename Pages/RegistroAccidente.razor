@@ -1,0 +1,210 @@
+@page "/registro-accidentes"
+@inject IJSRuntime JSRuntime
+@inject NavigationManager NavigationManager
+
+<h3>Registro de Accidentes de Tránsito</h3>
+
+<EditForm Model="@accidenteActual" OnValidSubmit="GuardarAccidente">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group">
+        <label for="fecha">Fecha del accidente:</label>
+        <InputDate id="fecha" @bind-Value="accidenteActual.Fecha" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label for="descripcion">Descripción:</label>
+        <InputTextArea id="descripcion" @bind-Value="accidenteActual.Descripcion" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label for="costo">Costo económico estimado:</label>
+        <InputNumber id="costo" @bind-Value="accidenteActual.CostoEconomico" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label for="muertos">Número de muertos:</label>
+        <InputNumber id="muertos" @bind-Value="accidenteActual.NumeroMuertos" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label for="heridos">Número de heridos:</label>
+        <InputNumber id="heridos" @bind-Value="accidenteActual.NumeroHeridos" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label for="vehiculos">Cantidad de vehículos involucrados:</label>
+        <InputNumber id="vehiculos" @bind-Value="accidenteActual.CantidadVehiculos" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">@(editandoAccidente ? "Actualizar" : "Guardar") Accidente</button>
+    @if (editandoAccidente)
+    {
+        <button type="button" class="btn btn-secondary" @onclick="CancelarEdicion">Cancelar</button>
+    }
+</EditForm>
+
+<h4 class="mt-4">Accidentes Registrados</h4>
+
+@if (listaAccidentes.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Descripción</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var acc in listaAccidentes)
+            {
+                <tr>
+                    <td>@acc.Fecha.ToShortDateString()</td>
+                    <td>@(acc.Descripcion?.Length > 50 ? acc.Descripcion.Substring(0, 47) + "..." : acc.Descripcion)</td>
+                    <td>
+                        <button class="btn btn-info btn-sm" @onclick="() => VerDetalles(acc)">Ver</button>
+                        <button class="btn btn-warning btn-sm" @onclick="() => EditarAccidente(acc)">Editar</button>
+                        <button class="btn btn-danger btn-sm" @onclick="() => EliminarAccidente(acc)">Eliminar</button>
+                        
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No hay accidentes registrados.</p>
+}
+
+@if (accidenteSeleccionado != null)
+{
+    <div class="modal" tabindex="-1" style="display:block" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Detalles del Accidente</h5>
+                    <button type="button" class="close" @onclick="CerrarDetalles">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p><strong>Fecha:</strong> @accidenteSeleccionado.Fecha.ToShortDateString()</p>
+                    <p><strong>Descripción:</strong> @accidenteSeleccionado.Descripcion</p>
+                    <p><strong>Costo Económico:</strong> @accidenteSeleccionado.CostoEconomico.ToString("C")</p>
+                    <p><strong>Número de Muertos:</strong> @accidenteSeleccionado.NumeroMuertos</p>
+                    <p><strong>Número de Heridos:</strong> @accidenteSeleccionado.NumeroHeridos</p>
+                    <p><strong>Cantidad de Vehículos:</strong> @accidenteSeleccionado.CantidadVehiculos</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" @onclick="CerrarDetalles">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    private Accidente accidenteActual = new Accidente();
+    private List<Accidente> listaAccidentes = new List<Accidente>();
+    private Accidente accidenteSeleccionado;
+    private bool editandoAccidente = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await CargarAccidentes();
+    }
+
+    private async Task GuardarAccidente()
+    {
+        if (editandoAccidente)
+        {
+            var index = listaAccidentes.FindIndex(a => a.Id == accidenteActual.Id);
+            if (index != -1)
+            {
+                listaAccidentes[index] = accidenteActual;
+            }
+            editandoAccidente = false;
+        }
+        else
+        {
+            accidenteActual.Id = Guid.NewGuid().ToString();
+            listaAccidentes.Add(accidenteActual);
+        }
+        
+        await GuardarEnLocalStorage();
+        accidenteActual = new Accidente();
+        StateHasChanged();
+    }
+
+    private async Task CargarAccidentes()
+    {
+        var accidentesJson = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "accidentes");
+        if (!string.IsNullOrEmpty(accidentesJson))
+        {
+            listaAccidentes = System.Text.Json.JsonSerializer.Deserialize<List<Accidente>>(accidentesJson);
+        }
+    }
+
+    private void VerReporte(string Id)
+    {
+        NavigationManager.NavigateTo($"/reporte-accidente/{Id}");
+    }
+
+    private async Task GuardarEnLocalStorage()
+    {
+        var accidentesJson = System.Text.Json.JsonSerializer.Serialize(listaAccidentes);
+        await JSRuntime.InvokeVoidAsync("localStorage.setItem", "accidentes", accidentesJson);
+    }
+
+    private void VerDetalles(Accidente acc)
+    {
+        accidenteSeleccionado = acc;
+    }
+
+    private void CerrarDetalles()
+    {
+        accidenteSeleccionado = null;
+    }
+
+    private void EditarAccidente(Accidente acc)
+    {
+        accidenteActual = new Accidente
+        {
+            Id = acc.Id,
+            Fecha = acc.Fecha,
+            Descripcion = acc.Descripcion,
+            CostoEconomico = acc.CostoEconomico,
+            NumeroMuertos = acc.NumeroMuertos,
+            NumeroHeridos = acc.NumeroHeridos,
+            CantidadVehiculos = acc.CantidadVehiculos
+        };
+        editandoAccidente = true;
+    }
+
+    private void CancelarEdicion()
+    {
+        accidenteActual = new Accidente();
+        editandoAccidente = false;
+    }
+
+    private async Task EliminarAccidente(Accidente acc)
+    {
+        listaAccidentes.Remove(acc);
+        await GuardarEnLocalStorage();
+        StateHasChanged();
+    }
+
+    public class Accidente
+    {
+        public string Id { get; set; }
+        public DateTime Fecha { get; set; } = DateTime.Now;
+        public string Descripcion { get; set; }
+        public decimal CostoEconomico { get; set; }
+        public int NumeroMuertos { get; set; }
+        public int NumeroHeridos { get; set; }
+        public int CantidadVehiculos { get; set; }
+    }
+}

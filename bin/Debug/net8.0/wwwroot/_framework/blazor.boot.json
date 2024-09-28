@@ -1,7 +1,7 @@
 {
   "mainAssemblyName": "MiPaginaWeb",
   "resources": {
-    "hash": "sha256-uqIF2tXK7QdBGiRomMhEc0BNDlrnUI+A2dqN0Gjook0=",
+    "hash": "sha256-tJOFQ2cNgWmfGT61kTWSq8V8/dTCpKQMf+Dzdw81RUM=",
     "jsModuleNative": {
       "dotnet.native.8.0.7.6tjz90gkbg.js": "sha256-tFsxPBbhkdn6GKNBKvCRLzrfAHdyM86odYTe0MtrwMk="
     },
@@ -208,10 +208,10 @@
       "mscorlib.wasm": "sha256-fLbZiSHBNdpHoh4EgRqMaNP5NQyIK5TEj6AXFLqo8m8=",
       "netstandard.wasm": "sha256-d4xbAE8qrKq5euUoZHPO+jkYPjlCYBzUew45MKsYKic=",
       "System.Private.CoreLib.wasm": "sha256-8yi6NcX1lkNQgV4WKjnMBYIZyKh4P+OXnXVQmgxGZD4=",
-      "MiPaginaWeb.wasm": "sha256-x9lgwtCLpEV0RlCOH+lsaxn+6o1gAgz4tDCCuBBTiKs="
+      "MiPaginaWeb.wasm": "sha256-EAs1/0/0Cx/ureB9Dckhrn3WA1HZwCAuw47ucTiyllQ="
     },
     "pdb": {
-      "MiPaginaWeb.pdb": "sha256-f77ZHYG1pCG2rFyTnt9x7qTUNdUX8/soxuJcNs/Rf+M="
+      "MiPaginaWeb.pdb": "sha256-CxA5dQKFUzJ/BECNVrMKNrVIAgrUVDbT8Xj1yrBiozY="
     }
   },
   "cacheBootResources": true,

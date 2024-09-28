@@ -1,0 +1,114 @@
+@page "/reportes"
+@inject IJSRuntime JSRuntime
+
+<h3>Reportes de Accidentes</h3>
+
+<div class="row">
+    <div class="col-md-4">
+        <h4>Lista de Accidentes</h4>
+        @if (listaAccidentes.Any())
+        {
+            <div class="list-group">
+                @foreach (var acc in listaAccidentes)
+                {
+                    <button class="list-group-item list-group-item-action @(selectedAccidenteId == acc.Id ? "active" : "")"
+                            @onclick="() => SelectAccidente(acc.Id)">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-1">@acc.Fecha.ToShortDateString()</h5>
+                        </div>
+                        <p class="mb-1">@(acc.Descripcion?.Length > 30 ? acc.Descripcion.Substring(0, 27) + "..." : acc.Descripcion)</p>
+                    </button>
+                }
+            </div>
+        }
+        else
+        {
+            <p>No hay accidentes registrados.</p>
+        }
+    </div>
+    <div class="col-md-8">
+        <h4>Detalles del Accidente</h4>
+        @if (selectedAccidente != null)
+        {
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Reporte de Accidente - @selectedAccidente.Fecha.ToLongDateString()</h5>
+                    <p><strong>ID:</strong> @selectedAccidente.Id</p>
+                    <p><strong>Descripción:</strong> @selectedAccidente.Descripcion</p>
+                    <p><strong>Costo Económico:</strong> @selectedAccidente.CostoEconomico.ToString("C")</p>
+                    <p><strong>Número de Muertos:</strong> @selectedAccidente.NumeroMuertos</p>
+                    <p><strong>Número de Heridos:</strong> @selectedAccidente.NumeroHeridos</p>
+                    <p><strong>Cantidad de Vehículos Involucrados:</strong> @selectedAccidente.CantidadVehiculos</p>
+                    <button class="btn btn-primary" @onclick="ImprimirReporte">Imprimir Reporte</button>
+                </div>
+            </div>
+        }
+        else
+        {
+            <p>Seleccione un accidente de la lista para ver los detalles.</p>
+        }
+    </div>
+</div>
+
+@code {
+    private List<Accidente> listaAccidentes = new List<Accidente>();
+    private Accidente selectedAccidente;
+    private string selectedAccidenteId;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await CargarAccidentes();
+    }
+
+    private async Task CargarAccidentes()
+    {
+        var accidentesJson = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "accidentes");
+        if (!string.IsNullOrEmpty(accidentesJson))
+        {
+            listaAccidentes = System.Text.Json.JsonSerializer.Deserialize<List<Accidente>>(accidentesJson);
+            
+            // Asegurar que cada accidente tenga un ID único
+            foreach (var accidente in listaAccidentes.Where(a => string.IsNullOrEmpty(a.Id)))
+            {
+                accidente.Id = Guid.NewGuid().ToString();
+            }
+            
+            // Guardar los accidentes actualizados con IDs
+            await GuardarAccidentes();
+        }
+    }
+
+    private async Task GuardarAccidentes()
+    {
+        var accidentesJson = System.Text.Json.JsonSerializer.Serialize(listaAccidentes);
+        await JSRuntime.InvokeVoidAsync("localStorage.setItem", "accidentes", accidentesJson);
+    }
+
+    private void SelectAccidente(string id)
+    {
+        Console.WriteLine($"Seleccionando accidente con ID: {id}");
+        selectedAccidenteId = id;
+        selectedAccidente = listaAccidentes.FirstOrDefault(a => a.Id == id);
+        Console.WriteLine($"Accidente seleccionado: {selectedAccidente?.Descripcion ?? "Ninguno"}");
+        StateHasChanged();
+    }
+
+    private async Task ImprimirReporte()
+    {
+        if (selectedAccidente != null)
+        {
+            await JSRuntime.InvokeVoidAsync("print");
+        }
+    }
+
+    public class Accidente
+    {
+        public string Id { get; set; }
+        public DateTime Fecha { get; set; }
+        public string Descripcion { get; set; }
+        public decimal CostoEconomico { get; set; }
+        public int NumeroMuertos { get; set; }
+        public int NumeroHeridos { get; set; }
+        public int CantidadVehiculos { get; set; }
+    }
+}
